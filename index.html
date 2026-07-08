@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Saeed Sharif — Android Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0E1013;
+    --bg-panel: #16191E;
+    --bg-panel-2: #1C2027;
+    --line: #2A2F38;
+    --ink: #ECEAE4;
+    --ink-dim: #9BA0AA;
+    --ink-faint: #5C616B;
+    --accent: #3DDC84;      /* android green — focus/viewfinder */
+    --accent-dim: #29A362;
+    --warn: #FFB238;        /* exposure amber, used sparingly */
+    --radius: 10px;
+    --display: 'Space Grotesk', sans-serif;
+    --body: 'Inter', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--body);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;}
+  img,svg{display:block; max-width:100%;}
+
+  ::selection{ background:var(--accent); color:#0E1013; }
+
+  :focus-visible{
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  .wrap{ max-width:1080px; margin:0 auto; padding:0 28px; }
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(14,16,19,0.85);
+    backdrop-filter: blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  nav .wrap{ display:flex; align-items:center; justify-content:space-between; height:64px; }
+  .brand{ font-family:var(--mono); font-size:14px; letter-spacing:0.02em; display:flex; align-items:center; gap:8px;}
+  .brand .dot{ width:8px; height:8px; border-radius:50%; background:var(--accent); box-shadow:0 0 8px var(--accent); animation:pulse 2s infinite;}
+  @keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:0.35;} }
+  .navlinks{ display:flex; gap:28px; font-size:14px; color:var(--ink-dim); overflow-x:auto; scrollbar-width:none; -webkit-overflow-scrolling:touch; }
+  .navlinks::-webkit-scrollbar{ display:none; }
+  .navlinks a{ text-decoration:none; transition:color .2s; white-space:nowrap; }
+  .navlinks a:hover{ color:var(--ink); }
+  @media (max-width:640px){ .navlinks{ gap:18px; font-size:13px; } .brand{ font-size:13px; } nav .wrap{ gap:14px; } }
+
+  /* ---------- HERO ---------- */
+  header.hero{ padding:100px 0 80px; position:relative; overflow:hidden;}
+  .bracket-frame{ position:relative; padding:36px; }
+  .bracket-frame::before, .bracket-frame::after,
+  .bracket-frame .b2::before, .bracket-frame .b2::after{
+    content:""; position:absolute; width:22px; height:22px;
+    border-color:var(--accent); border-style:solid; opacity:0.85;
+  }
+  .bracket-frame::before{ top:0; left:0; border-width:2px 0 0 2px; }
+  .bracket-frame::after{ top:0; right:0; border-width:2px 2px 0 0; }
+  .bracket-frame .b2::before{ bottom:0; left:0; border-width:0 0 2px 2px; }
+  .bracket-frame .b2::after{ bottom:0; right:0; border-width:0 2px 2px 0; }
+
+  .eyebrow{
+    font-family:var(--mono); font-size:13px; color:var(--accent);
+    letter-spacing:0.08em; text-transform:uppercase; margin-bottom:18px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .eyebrow .rec{ width:7px; height:7px; border-radius:50%; background:var(--warn); animation:pulse 1.4s infinite; }
+
+  h1.title{
+    font-family:var(--display); font-weight:700;
+    font-size:clamp(38px, 6vw, 68px); line-height:1.03; letter-spacing:-0.01em;
+  }
+  h1.title span{ color:var(--accent); }
+
+  .role{ font-family:var(--mono); font-size:16px; color:var(--ink-dim); margin-top:16px; }
+
+  .lede{ margin-top:22px; max-width:560px; color:var(--ink-dim); font-size:16.5px; }
+
+  .cta-row{ display:flex; gap:14px; margin-top:34px; flex-wrap:wrap; }
+  .btn{
+    font-family:var(--body); font-weight:600; font-size:14.5px;
+    padding:13px 22px; border-radius:8px; text-decoration:none;
+    display:inline-flex; align-items:center; gap:8px; transition:transform .15s ease, background .2s;
+  }
+  .btn-primary{ background:var(--accent); color:#08120C; }
+  .btn-primary:hover{ transform:translateY(-2px); background:#54e69a; }
+  .btn-ghost{ border:1px solid var(--line); color:var(--ink); }
+  .btn-ghost:hover{ border-color:var(--accent); transform:translateY(-2px); }
+
+  /* ---------- STATS ---------- */
+  .stats{
+    border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+    background:var(--bg-panel);
+  }
+  .stats .wrap{ display:grid; grid-template-columns:repeat(4,1fr); }
+  .stat{ padding:28px 20px; text-align:center; border-right:1px solid var(--line); }
+  .stat:last-child{ border-right:none; }
+  .stat .num{ font-family:var(--display); font-size:30px; font-weight:700; color:var(--accent); }
+  .stat .lbl{ font-family:var(--mono); font-size:11.5px; color:var(--ink-dim); text-transform:uppercase; letter-spacing:0.06em; margin-top:6px; }
+  @media (max-width:640px){ .stats .wrap{ grid-template-columns:repeat(2,1fr);} .stat{ border-bottom:1px solid var(--line);} }
+
+  /* ---------- SECTIONS ---------- */
+  section{ padding:86px 0; }
+  .section-head{ margin-bottom:44px; }
+  .section-tag{ font-family:var(--mono); font-size:12.5px; color:var(--accent); text-transform:uppercase; letter-spacing:0.08em; }
+  h2.section-title{ font-family:var(--display); font-size:clamp(26px,3.4vw,36px); margin-top:10px; font-weight:600; }
+  .section-sub{ color:var(--ink-dim); margin-top:10px; max-width:600px; font-size:15px; }
+
+  /* ---------- PROJECT CARDS ---------- */
+  .grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:20px; }
+  @media (max-width:760px){ .grid{ grid-template-columns:1fr; } }
+
+  .card{
+    position:relative; background:var(--bg-panel); border:1px solid var(--line);
+    border-radius:var(--radius); padding:26px 26px 24px; transition:border-color .2s, transform .2s;
+  }
+  .card:hover{ border-color:var(--accent); transform:translateY(-3px); }
+  .card::before, .card::after{
+    content:""; position:absolute; width:14px; height:14px;
+    border-color:var(--accent); border-style:solid; opacity:0; transition:opacity .2s;
+  }
+  .card::before{ top:-1px; left:-1px; border-width:2px 0 0 2px; }
+  .card::after{ bottom:-1px; right:-1px; border-width:0 2px 2px 0; }
+  .card:hover::before, .card:hover::after{ opacity:1; }
+
+  .card-top{ display:flex; align-items:flex-start; justify-content:space-between; gap:10px; }
+  .card h3{ font-family:var(--display); font-size:19px; font-weight:600; }
+  .badge{
+    font-family:var(--mono); font-size:10.5px; text-transform:uppercase; letter-spacing:0.05em;
+    padding:4px 9px; border-radius:20px; white-space:nowrap; border:1px solid var(--line); color:var(--ink-dim);
+  }
+  .badge.wip{ color:var(--warn); border-color:rgba(255,178,56,0.4); }
+  .card p.desc{ color:var(--ink-dim); font-size:14.5px; margin-top:10px; }
+
+  .tags{ display:flex; flex-wrap:wrap; gap:7px; margin-top:16px; }
+  .tag{
+    font-family:var(--mono); font-size:11px; color:var(--accent);
+    background:rgba(61,220,132,0.08); border:1px solid rgba(61,220,132,0.25);
+    padding:4px 9px; border-radius:5px;
+  }
+
+  .versions{ margin-top:16px; border-top:1px dashed var(--line); padding-top:14px; }
+  .version-row{ display:flex; gap:12px; margin-bottom:10px; }
+  .version-row:last-child{ margin-bottom:0; }
+  .v-label{ font-family:var(--mono); font-size:10.5px; color:var(--accent); min-width:78px; padding-top:2px; }
+  .v-text{ font-size:13.5px; color:var(--ink-dim); }
+
+  /* ---------- EXPERIENCE STRIP ---------- */
+  .exp-strip{ display:flex; gap:16px; flex-wrap:wrap; margin-bottom:36px; }
+  .exp-chip{
+    font-family:var(--mono); font-size:13px; padding:10px 16px; border:1px solid var(--line);
+    border-radius:8px; color:var(--ink-dim); background:var(--bg-panel);
+  }
+  .exp-chip b{ color:var(--ink); font-weight:600; }
+
+  /* ---------- SKILLS ---------- */
+  .skills-wrap{ display:flex; flex-wrap:wrap; gap:10px; }
+  .skill-pill{
+    font-family:var(--mono); font-size:13px; padding:9px 16px;
+    border:1px solid var(--line); border-radius:24px; color:var(--ink-dim);
+    background:var(--bg-panel); transition:.2s;
+  }
+  .skill-pill:hover{ border-color:var(--accent); color:var(--ink); }
+
+  /* ---------- CONTACT ---------- */
+  .contact-panel{
+    background:var(--bg-panel); border:1px solid var(--line); border-radius:16px;
+    padding:52px 40px; text-align:center; position:relative;
+  }
+  .contact-panel h2{ font-family:var(--display); font-size:clamp(24px,3.6vw,34px); }
+  .contact-panel p{ color:var(--ink-dim); margin-top:12px; }
+  .contact-row{ display:flex; gap:14px; justify-content:center; margin-top:30px; flex-wrap:wrap; }
+
+  footer{ padding:36px 0; border-top:1px solid var(--line); }
+  footer .wrap{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; }
+  footer .f-left{ font-family:var(--mono); font-size:12.5px; color:var(--ink-faint); }
+  footer .f-right{ font-family:var(--mono); font-size:12.5px; color:var(--ink-faint); }
+
+  .reveal{ opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease; }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+
+  @media (prefers-reduced-motion: reduce){
+    .reveal{ opacity:1; transform:none; transition:none; }
+    .dot, .rec{ animation:none; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="brand"><span class="dot"></span> SAEED&nbsp;SHARIF</div>
+    <div class="navlinks">
+      <a href="#experience">Experience</a>
+      <a href="#projects">Projects</a>
+      <a href="#skills">Skills</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="bracket-frame">
+      <div class="b2"></div>
+      <div class="eyebrow"><span class="rec"></span> ANDROID DEVELOPER · 2.5 YEARS EXPERIENCE</div>
+      <h1 class="title">Saeed Sharif<br><span>builds mobile apps</span> that see, hear and respond.</h1>
+      <div class="role">Kotlin · Android SDK · Compose Multiplatform · OpenCV · WebRTC · On-device AI</div>
+      <p class="lede">I design and ship Android apps that combine computer vision, real-time communication and AI models — from camera-based editors to live video chat and intelligent writing tools.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="tel:03151258080">Call: 0315 1258080</a>
+        <a class="btn btn-ghost" href="https://www.linkedin.com/in/saeed-sharif-4978a026b/" target="_blank" rel="noopener">View LinkedIn ↗</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="stats" aria-label="Career stats">
+  <div class="wrap">
+    <div class="stat"><div class="num">2.5+</div><div class="lbl">Years Experience</div></div>
+    <div class="stat"><div class="num">9</div><div class="lbl">Apps Shipped</div></div>
+    <div class="stat"><div class="num">2</div><div class="lbl">Companies</div></div>
+    <div class="stat"><div class="num">3</div><div class="lbl">AI / CV Products</div></div>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="section-tag">// Experience</div>
+      <h2 class="section-title">Where the work happened</h2>
+      <p class="section-sub">Product Android development at two companies, shipping consumer apps end-to-end.</p>
+    </div>
+    <div class="exp-strip reveal">
+      <div class="exp-chip"><b>Techin Technology</b> — Android Developer</div>
+      <div class="exp-chip"><b>Mobologics</b> — Android Developer</div>
+    </div>
+
+    <div class="grid">
+      <div class="card reveal">
+        <div class="card-top"><h3>Make Me Fat</h3><span class="badge">Photo Editor</span></div>
+        <p class="desc">A photo editing app built around a single sharp effect — realistic body/face transformation filters for entertainment and sharing.</p>
+        <div class="tags"><span class="tag">Android</span><span class="tag">Image Processing</span><span class="tag">UI/UX</span></div>
+      </div>
+
+      <div class="card reveal">
+        <div class="card-top"><h3>Clap to Find My Phone</h3><span class="badge">AI Model</span></div>
+        <p class="desc">Detects a hand clap through an on-device AI audio model and triggers the phone to ring or vibrate — helping users locate it instantly.</p>
+        <div class="tags"><span class="tag">On-device AI</span><span class="tag">Audio ML</span><span class="tag">Android</span></div>
+      </div>
+
+      <div class="card reveal">
+        <div class="card-top"><h3>Sun &amp; Solar Tracker</h3><span class="badge">Utility</span></div>
+        <p class="desc">Calculates real-time sun position and solar path using astronomical formulas, useful for photographers, solar panel placement and daily planning.</p>
+        <div class="tags"><span class="tag">Astronomy Math</span><span class="tag">Location APIs</span><span class="tag">Android</span></div>
+      </div>
+
+      <div class="card reveal">
+        <div class="card-top"><h3>Metal Detector</h3><span class="badge">Utility</span></div>
+        <p class="desc">Uses the phone's built-in magnetometer to detect nearby metal objects, with a simple real-time strength indicator.</p>
+        <div class="tags"><span class="tag">Sensors API</span><span class="tag">Android</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projects" style="background:var(--bg-panel); border-top:1px solid var(--line); border-bottom:1px solid var(--line);">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="section-tag">// Independent &amp; Ongoing Projects</div>
+      <h2 class="section-title">Deeper builds — AI, AR &amp; real-time</h2>
+      <p class="section-sub">Projects where I owned the architecture, from computer vision pipelines to live communication and AI-assisted writing.</p>
+    </div>
+
+    <div class="grid">
+      <div class="card reveal" style="grid-column:1 / -1;">
+        <div class="card-top"><h3>AR Drawing App</h3><span class="badge">Computer Vision</span></div>
+        <p class="desc">Turns any photo into a step-by-step sketch guide — uses OpenCV for edge/contour processing and a camera overlay so users can trace the sketch directly onto paper in real time.</p>
+        <div class="tags"><span class="tag">OpenCV</span><span class="tag">Camera Overlay</span><span class="tag">Android</span></div>
+      </div>
+
+      <div class="card reveal" style="grid-column:1 / -1;">
+        <div class="card-top"><h3>AI Writing Assistant</h3><span class="badge">3 Versions</span></div>
+        <p class="desc">A writing enhancement app shipped in three distinct builds, each targeting a different depth of feature set.</p>
+        <div class="versions">
+          <div class="version-row"><div class="v-label">FULL</div><div class="v-text">Complete feature set with extensive testing tools and refinement passes.</div></div>
+          <div class="version-row"><div class="v-label">SIMPLE</div><div class="v-text">Four focused tools — Professional, Remake, Rewrite, Grammar Checker — plus a custom AI-powered keyboard.</div></div>
+          <div class="version-row"><div class="v-label">EXTENDED</div><div class="v-text">Adds Grammar Test, AI Tutor and Translator alongside the core writing tools.</div></div>
+        </div>
+      </div>
+
+      <div class="card reveal">
+        <div class="card-top"><h3>Random Video Chat</h3><span class="badge">Real-time</span></div>
+        <p class="desc">A live video chat app connecting random users, with real-time calling and messaging built on WebRTC.</p>
+        <div class="tags"><span class="tag">WebRTC</span><span class="tag">Real-time Messaging</span></div>
+      </div>
+
+      <div class="card reveal">
+        <div class="card-top"><h3>AI Grammar Checker (iOS)</h3><span class="badge">Cross-platform</span></div>
+        <p class="desc">An AI-powered grammar checking app built for iOS using Compose Multiplatform (CMP), sharing core logic across platforms.</p>
+        <div class="tags"><span class="tag">Compose Multiplatform</span><span class="tag">iOS</span><span class="tag">AI</span></div>
+      </div>
+
+      <div class="card reveal" style="grid-column:1 / -1;">
+        <div class="card-top"><h3>PDF Reader &amp; Editor</h3><span class="badge wip">In Progress</span></div>
+        <p class="desc">An all-in-one PDF utility app covering editing, conversion and AI-assisted reading, currently in active development.</p>
+        <div class="tags"><span class="tag">Edit PDF</span><span class="tag">Split</span><span class="tag">Merge</span><span class="tag">Sign PDF</span><span class="tag">Scan to PDF</span><span class="tag">Compress</span><span class="tag">PDF to Word</span><span class="tag">Word to PDF</span><span class="tag">AI Chat with PDF</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="section-tag">// Toolkit</div>
+      <h2 class="section-title">Technologies I work with</h2>
+    </div>
+    <div class="skills-wrap reveal">
+      <span class="skill-pill">Kotlin</span>
+      <span class="skill-pill">Android SDK</span>
+      <span class="skill-pill">Compose Multiplatform</span>
+      <span class="skill-pill">OpenCV</span>
+      <span class="skill-pill">WebRTC</span>
+      <span class="skill-pill">On-device AI / ML</span>
+      <span class="skill-pill">Sensors API</span>
+      <span class="skill-pill">Camera / AR Overlay</span>
+      <span class="skill-pill">iOS (CMP)</span>
+      <span class="skill-pill">REST APIs</span>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <div class="contact-panel reveal">
+      <h2>Let's build something together.</h2>
+      <p>Available for Android development roles and freelance projects.</p>
+      <div class="contact-row">
+        <a class="btn btn-primary" href="tel:03151258080">📞 0315 1258080</a>
+        <a class="btn btn-ghost" href="https://www.linkedin.com/in/saeed-sharif-4978a026b/" target="_blank" rel="noopener">LinkedIn ↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="f-left">© 2026 Saeed Sharif</div>
+    <div class="f-right">Android Developer / Islamabad, Pakistan</div>
+  </div>
+</footer>
+
+<script>
+  const obs = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); obs.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+
+</body>
+</html>
