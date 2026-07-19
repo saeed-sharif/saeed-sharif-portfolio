@@ -72,8 +72,7 @@
 
   /* ---------- HERO ---------- */
   header.hero{ padding:100px 0 80px; position:relative; overflow:hidden;}
-  header.hero .wrap{ display:grid; grid-template-columns:1.15fr 0.85fr; gap:40px; align-items:center; }
-  @media (max-width:900px){ header.hero .wrap{ grid-template-columns:1fr; } .hero-visual{ order:-1; height:220px !important; margin-bottom:8px; } }
+
 
   .bracket-frame{ position:relative; padding:36px; }
   .bracket-frame::before, .bracket-frame::after,
@@ -115,59 +114,7 @@
   .btn-ghost{ border:1px solid var(--line); color:var(--ink); }
   .btn-ghost:hover{ border-color:var(--accent); transform:translateY(-2px); }
 
-  /* ---------- HERO VISUAL: viewfinder signature ---------- */
-  .hero-visual{
-    position:relative; height:340px; border:1px solid var(--line); border-radius:14px;
-    background:
-      linear-gradient(rgba(61,220,132,0.05) 1px, transparent 1px) 0 0/24px 24px,
-      linear-gradient(90deg, rgba(61,220,132,0.05) 1px, transparent 1px) 0 0/24px 24px,
-      var(--bg-panel);
-    overflow:hidden;
-  }
-  .hv-corner{ position:absolute; width:18px; height:18px; border-color:var(--accent); border-style:solid; opacity:0.9; }
-  .hv-corner.tl{ top:14px; left:14px; border-width:2px 0 0 2px; }
-  .hv-corner.tr{ top:14px; right:14px; border-width:2px 2px 0 0; }
-  .hv-corner.bl{ bottom:14px; left:14px; border-width:0 0 2px 2px; }
-  .hv-corner.br{ bottom:14px; right:14px; border-width:0 2px 2px 0; }
 
-  .hv-reticle{
-    position:absolute; width:64px; height:64px; top:50%; left:50%;
-    margin:-32px 0 0 -32px; border:1.5px solid var(--accent); border-radius:50%;
-    animation:drift 7s ease-in-out infinite;
-  }
-  .hv-reticle::before, .hv-reticle::after{
-    content:""; position:absolute; background:var(--accent); opacity:0.6;
-  }
-  .hv-reticle::before{ top:50%; left:-14px; width:10px; height:1.5px; }
-  .hv-reticle::after{ top:-14px; left:50%; width:1.5px; height:10px; }
-  @keyframes drift{
-    0%,100%{ transform:translate(0,0); }
-    25%{ transform:translate(38px,-22px); }
-    50%{ transform:translate(-24px,26px); }
-    75%{ transform:translate(-40px,-16px); }
-  }
-
-  .hv-scan{
-    position:absolute; left:0; right:0; height:2px;
-    background:linear-gradient(90deg, transparent, var(--accent), transparent);
-    opacity:0.55; animation:scan 3.2s linear infinite;
-  }
-  @keyframes scan{ 0%{ top:8%; } 100%{ top:92%; } }
-
-  .hv-readout{
-    position:absolute; bottom:14px; left:14px; font-family:var(--mono); font-size:10.5px;
-    color:var(--accent); opacity:0.75; line-height:1.5;
-  }
-  .hv-readout .r2{ color:var(--ink-faint); }
-  .hv-tag{
-    position:absolute; top:14px; right:38px; font-family:var(--mono); font-size:10px;
-    color:var(--ink-faint); letter-spacing:0.05em;
-  }
-  @media (prefers-reduced-motion: reduce){
-    .hv-reticle, .hv-scan{ animation:none; }
-  }
-
-  /* ---------- STATS ---------- */
   .stats{
     border-top:1px solid var(--line); border-bottom:1px solid var(--line);
     background:var(--bg-panel);
@@ -289,7 +236,26 @@
   </div>
 </nav>
 
+<header class="hero">
+  <div class="wrap">
+    <div class="bracket-frame">
+      <div class="b2"></div>
+      <div class="eyebrow"><span class="rec"></span> ANDROID DEVELOPER · 2.5 YEARS EXPERIENCE</div>
+      <h1 class="title">Saeed Sharif<br><span>builds mobile apps</span> that see, hear and respond.</h1>
+      <div class="role">
+        Kotlin • Jetpack Compose • Android SDK • Compose Multiplatform • OpenCV • WebRTC • CameraX • Input Method Service (IME) • Firebase • AI Integration
+      </div>
 
+      <p class="lede">I build production-ready Android applications using Kotlin and Jetpack Compose, specializing in AI integration, CameraX, OpenCV, WebRTC, custom keyboards (IME), Firebase and modern Android architecture. My apps are successfully published on Google Play and the Apple App Store.</p>
+
+      <div class="cta-row">
+        <a class="btn btn-primary" href="tel:03151258080">Call: 0315 1258080</a>
+        <a class="btn btn-ghost" href="https://www.linkedin.com/in/saeed-sharif-4978a026b/" target="_blank" rel="noopener">View LinkedIn ↗</a>
+      </div>
+    </div>
+
+  </div>
+</header>
 
 <section class="stats" aria-label="Career stats">
   <div class="wrap">
