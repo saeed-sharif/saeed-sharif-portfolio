@@ -27,7 +27,9 @@
   *{box-sizing:border-box; margin:0; padding:0;}
   html{scroll-behavior:smooth;}
   body{
-    background:var(--bg);
+    background:
+      radial-gradient(circle at 1px 1px, rgba(255,255,255,0.035) 1px, transparent 0) 0 0/26px 26px,
+      var(--bg);
     color:var(--ink);
     font-family:var(--body);
     line-height:1.55;
@@ -53,17 +55,26 @@
     border-bottom:1px solid var(--line);
   }
   nav .wrap{ display:flex; align-items:center; justify-content:space-between; height:64px; }
-  .brand{ font-family:var(--mono); font-size:14px; letter-spacing:0.02em; display:flex; align-items:center; gap:8px;}
-  .brand .dot{ width:8px; height:8px; border-radius:50%; background:var(--accent); box-shadow:0 0 8px var(--accent); animation:pulse 2s infinite;}
-  @keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:0.35;} }
+  .brand{ font-family:var(--mono); font-size:14px; letter-spacing:0.02em; display:flex; align-items:center; gap:10px;}
+  .brand-mark{ width:26px; height:26px; flex-shrink:0; }
+  .brand-mark circle.outer{ fill:none; stroke:var(--line); stroke-width:1.5; }
+  .brand-mark circle.iris{ fill:none; stroke:var(--accent); stroke-width:1.5; stroke-dasharray:3 3; animation:spin 8s linear infinite; transform-origin:center; }
+  .brand-mark circle.core{ fill:var(--accent); }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+  .brand .dot{ display:none; }
   .navlinks{ display:flex; gap:28px; font-size:14px; color:var(--ink-dim); overflow-x:auto; scrollbar-width:none; -webkit-overflow-scrolling:touch; }
   .navlinks::-webkit-scrollbar{ display:none; }
-  .navlinks a{ text-decoration:none; transition:color .2s; white-space:nowrap; }
+  .navlinks a{ text-decoration:none; transition:color .2s; white-space:nowrap; position:relative; }
+  .navlinks a::after{ content:""; position:absolute; left:0; right:0; bottom:-21px; height:2px; background:var(--accent); transform:scaleX(0); transition:transform .2s; }
   .navlinks a:hover{ color:var(--ink); }
+  .navlinks a:hover::after{ transform:scaleX(1); }
   @media (max-width:640px){ .navlinks{ gap:18px; font-size:13px; } .brand{ font-size:13px; } nav .wrap{ gap:14px; } }
 
   /* ---------- HERO ---------- */
   header.hero{ padding:100px 0 80px; position:relative; overflow:hidden;}
+  header.hero .wrap{ display:grid; grid-template-columns:1.15fr 0.85fr; gap:40px; align-items:center; }
+  @media (max-width:900px){ header.hero .wrap{ grid-template-columns:1fr; } .hero-visual{ order:-1; height:220px !important; margin-bottom:8px; } }
+
   .bracket-frame{ position:relative; padding:36px; }
   .bracket-frame::before, .bracket-frame::after,
   .bracket-frame .b2::before, .bracket-frame .b2::after{
@@ -81,14 +92,15 @@
     display:flex; align-items:center; gap:10px;
   }
   .eyebrow .rec{ width:7px; height:7px; border-radius:50%; background:var(--warn); animation:pulse 1.4s infinite; }
+  @keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:0.35;} }
 
   h1.title{
     font-family:var(--display); font-weight:700;
-    font-size:clamp(38px, 6vw, 68px); line-height:1.03; letter-spacing:-0.01em;
+    font-size:clamp(38px, 5.2vw, 64px); line-height:1.03; letter-spacing:-0.01em;
   }
   h1.title span{ color:var(--accent); }
 
-  .role{ font-family:var(--mono); font-size:16px; color:var(--ink-dim); margin-top:16px; }
+  .role{ font-family:var(--mono); font-size:15px; color:var(--ink-dim); margin-top:16px; }
 
   .lede{ margin-top:22px; max-width:560px; color:var(--ink-dim); font-size:16.5px; }
 
@@ -102,6 +114,58 @@
   .btn-primary:hover{ transform:translateY(-2px); background:#54e69a; }
   .btn-ghost{ border:1px solid var(--line); color:var(--ink); }
   .btn-ghost:hover{ border-color:var(--accent); transform:translateY(-2px); }
+
+  /* ---------- HERO VISUAL: viewfinder signature ---------- */
+  .hero-visual{
+    position:relative; height:340px; border:1px solid var(--line); border-radius:14px;
+    background:
+      linear-gradient(rgba(61,220,132,0.05) 1px, transparent 1px) 0 0/24px 24px,
+      linear-gradient(90deg, rgba(61,220,132,0.05) 1px, transparent 1px) 0 0/24px 24px,
+      var(--bg-panel);
+    overflow:hidden;
+  }
+  .hv-corner{ position:absolute; width:18px; height:18px; border-color:var(--accent); border-style:solid; opacity:0.9; }
+  .hv-corner.tl{ top:14px; left:14px; border-width:2px 0 0 2px; }
+  .hv-corner.tr{ top:14px; right:14px; border-width:2px 2px 0 0; }
+  .hv-corner.bl{ bottom:14px; left:14px; border-width:0 0 2px 2px; }
+  .hv-corner.br{ bottom:14px; right:14px; border-width:0 2px 2px 0; }
+
+  .hv-reticle{
+    position:absolute; width:64px; height:64px; top:50%; left:50%;
+    margin:-32px 0 0 -32px; border:1.5px solid var(--accent); border-radius:50%;
+    animation:drift 7s ease-in-out infinite;
+  }
+  .hv-reticle::before, .hv-reticle::after{
+    content:""; position:absolute; background:var(--accent); opacity:0.6;
+  }
+  .hv-reticle::before{ top:50%; left:-14px; width:10px; height:1.5px; }
+  .hv-reticle::after{ top:-14px; left:50%; width:1.5px; height:10px; }
+  @keyframes drift{
+    0%,100%{ transform:translate(0,0); }
+    25%{ transform:translate(38px,-22px); }
+    50%{ transform:translate(-24px,26px); }
+    75%{ transform:translate(-40px,-16px); }
+  }
+
+  .hv-scan{
+    position:absolute; left:0; right:0; height:2px;
+    background:linear-gradient(90deg, transparent, var(--accent), transparent);
+    opacity:0.55; animation:scan 3.2s linear infinite;
+  }
+  @keyframes scan{ 0%{ top:8%; } 100%{ top:92%; } }
+
+  .hv-readout{
+    position:absolute; bottom:14px; left:14px; font-family:var(--mono); font-size:10.5px;
+    color:var(--accent); opacity:0.75; line-height:1.5;
+  }
+  .hv-readout .r2{ color:var(--ink-faint); }
+  .hv-tag{
+    position:absolute; top:14px; right:38px; font-family:var(--mono); font-size:10px;
+    color:var(--ink-faint); letter-spacing:0.05em;
+  }
+  @media (prefers-reduced-motion: reduce){
+    .hv-reticle, .hv-scan{ animation:none; }
+  }
 
   /* ---------- STATS ---------- */
   .stats{
@@ -146,6 +210,7 @@
     padding:4px 9px; border-radius:20px; white-space:nowrap; border:1px solid var(--line); color:var(--ink-dim);
   }
   .badge.wip{ color:var(--warn); border-color:rgba(255,178,56,0.4); }
+  .badge.client{ color:var(--accent); border-color:rgba(61,220,132,0.4); }
   .card p.desc{ color:var(--ink-dim); font-size:14.5px; margin-top:10px; }
 
   .tags{ display:flex; flex-wrap:wrap; gap:7px; margin-top:16px; }
@@ -189,7 +254,9 @@
 
   footer{ padding:36px 0; border-top:1px solid var(--line); }
   footer .wrap{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; }
-  footer .f-left{ font-family:var(--mono); font-size:12.5px; color:var(--ink-faint); }
+  footer .f-left{ font-family:var(--mono); font-size:12.5px; color:var(--ink-faint); display:flex; align-items:center; gap:8px; }
+  footer .f-left .brand-mark{ width:16px; height:16px; }
+  footer .f-left .brand-mark .iris{ animation:none; }
   footer .f-right{ font-family:var(--mono); font-size:12.5px; color:var(--ink-faint); }
 
   .reveal{ opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease; }
@@ -205,7 +272,14 @@
 
 <nav>
   <div class="wrap">
-    <div class="brand"><span class="dot"></span> SAEED&nbsp;SHARIF</div>
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 26 26" aria-hidden="true">
+        <circle class="outer" cx="13" cy="13" r="11.5"></circle>
+        <circle class="iris" cx="13" cy="13" r="7.5"></circle>
+        <circle class="core" cx="13" cy="13" r="2"></circle>
+      </svg>
+      SAEED&nbsp;SHARIF
+    </div>
     <div class="navlinks">
       <a href="#experience">Experience</a>
       <a href="#projects">Projects</a>
@@ -221,17 +295,29 @@
       <div class="b2"></div>
       <div class="eyebrow"><span class="rec"></span> ANDROID DEVELOPER · 2.5 YEARS EXPERIENCE</div>
       <h1 class="title">Saeed Sharif<br><span>builds mobile apps</span> that see, hear and respond.</h1>
-<div class="role">
-Kotlin • Jetpack Compose • Android SDK • Compose Multiplatform • OpenCV • WebRTC • CameraX • Input Method Service (IME) • Firebase • AI Integration
-</div>
-     
+      <div class="role">
+        Kotlin • Jetpack Compose • Android SDK • Compose Multiplatform • OpenCV • WebRTC • CameraX • Input Method Service (IME) • Firebase • AI Integration
+      </div>
+
       <p class="lede">I build production-ready Android applications using Kotlin and Jetpack Compose, specializing in AI integration, CameraX, OpenCV, WebRTC, custom keyboards (IME), Firebase and modern Android architecture. My apps are successfully published on Google Play and the Apple App Store.</p>
 
-
-      
       <div class="cta-row">
         <a class="btn btn-primary" href="tel:03151258080">Call: 0315 1258080</a>
         <a class="btn btn-ghost" href="https://www.linkedin.com/in/saeed-sharif-4978a026b/" target="_blank" rel="noopener">View LinkedIn ↗</a>
+      </div>
+    </div>
+
+    <div class="hero-visual" aria-hidden="true">
+      <div class="hv-corner tl"></div>
+      <div class="hv-corner tr"></div>
+      <div class="hv-corner bl"></div>
+      <div class="hv-corner br"></div>
+      <div class="hv-scan"></div>
+      <div class="hv-reticle"></div>
+      <div class="hv-tag">LIVE PREVIEW</div>
+      <div class="hv-readout">
+        FOCUS · LOCKED<br>
+        <span class="r2">CameraX · OpenCV · 60fps</span>
       </div>
     </div>
   </div>
@@ -240,14 +326,13 @@ Kotlin • Jetpack Compose • Android SDK • Compose Multiplatform • OpenCV 
 <section class="stats" aria-label="Career stats">
   <div class="wrap">
    <div class="stat">
-<div class="num">13+</div>
-<div class="lbl">Published Apps</div>
-</div>
-
-<div class="stat">
-<div class="num">6+</div>
-<div class="lbl">AI / CV Products</div>
-</div>
+      <div class="num">13+</div>
+      <div class="lbl">Published Apps</div>
+    </div>
+    <div class="stat">
+      <div class="num">6+</div>
+      <div class="lbl">AI / CV Products</div>
+    </div>
   </div>
 </section>
 
@@ -272,638 +357,305 @@ Kotlin • Jetpack Compose • Android SDK • Compose Multiplatform • OpenCV 
     <div class="grid">
 
       <!-- Make Me Fat -->
-
       <div class="card reveal">
-
         <div class="card-top">
           <h3>Make Me Fat</h3>
           <span class="badge">Photo Editor</span>
         </div>
-
         <p class="desc">
           AI powered body and face transformation application with realistic
           image processing and entertainment filters.
         </p>
-
         <div class="tags">
           <span class="tag">Android</span>
           <span class="tag">Image Processing</span>
           <span class="tag">AI</span>
         </div>
-
         <div class="cta-row">
-
-          <a class="btn btn-ghost"
-             href="https://play.google.com/store/apps/details?id=com.make_me_fat.fat_face"
-             target="_blank">
-             Google Play ↗
-          </a>
-
-          <a class="btn btn-ghost"
-             href="https://play.google.com/store/apps/details?id=com.slim_to_fat.fat_face_app"
-             target="_blank">
-             Optimized Version ↗
-          </a>
-
+          <a class="btn btn-ghost" href="https://play.google.com/store/apps/details?id=com.make_me_fat.fat_face" target="_blank">Google Play ↗</a>
+          <a class="btn btn-ghost" href="https://play.google.com/store/apps/details?id=com.slim_to_fat.fat_face_app" target="_blank">Optimized Version ↗</a>
         </div>
-
       </div>
 
-
-
       <!-- Adil Bakers -->
-
       <div class="card reveal">
-
         <div class="card-top">
           <h3>Adil Bakers</h3>
-          <span class="badge">E-Commerce</span>
+          <span class="badge client">Client Project</span>
         </div>
-
         <p class="desc">
           Official bakery ordering application where users browse products,
           place orders and manage deliveries with a modern shopping experience.
         </p>
-
         <div class="tags">
           <span class="tag">Android</span>
           <span class="tag">E-Commerce</span>
           <span class="tag">Firebase</span>
         </div>
-
         <div class="cta-row">
-          <a class="btn btn-ghost"
-             href="https://play.google.com/store/apps/details?id=com.innova.adil_bakers"
-             target="_blank">
-             View on Google Play ↗
-          </a>
+          <a class="btn btn-ghost" href="https://play.google.com/store/apps/details?id=com.innova.adil_bakers" target="_blank">View on Google Play ↗</a>
         </div>
-
       </div>
-      <!-- KB chat  -->
+
+      <!-- KB chat -->
       <div class="card reveal">
-
-    <div class="card-top">
-        <h3>KB Chat - Keyboard Translator</h3>
-        <span class="badge">Productivity</span>
-    </div>
-
-    <p class="desc">
-        Client project featuring a fully custom Android keyboard with
-        multilingual translation, smart typing assistance and seamless
-        in-app text input. I developed the custom keyboard experience,
-        keyboard interactions and input functionality.
-    </p>
-
-    <div class="tags">
-        <span class="tag">Custom Keyboard</span>
-        <span class="tag">Input Method Service</span>
-        <span class="tag">Translation</span>
-        <span class="tag">Android</span>
-    </div>
-
-    <div class="cta-row">
-
-        <a class="btn btn-ghost"
-           target="_blank"
-           href="https://play.google.com/store/apps/details?id=com.kb.chat.translator.all.language.translator">
-
-            View on Google Play ↗
-
-        </a>
-
-    </div>
-
-</div>
-
-
+        <div class="card-top">
+          <h3>KB Chat - Keyboard Translator</h3>
+          <span class="badge client">Client Project</span>
+        </div>
+        <p class="desc">
+          Client project featuring a fully custom Android keyboard with
+          multilingual translation, smart typing assistance and seamless
+          in-app text input. I developed the custom keyboard experience,
+          keyboard interactions and input functionality.
+        </p>
+        <div class="tags">
+          <span class="tag">Custom Keyboard</span>
+          <span class="tag">Input Method Service</span>
+          <span class="tag">Translation</span>
+          <span class="tag">Android</span>
+        </div>
+        <div class="cta-row">
+          <a class="btn btn-ghost" target="_blank" href="https://play.google.com/store/apps/details?id=com.kb.chat.translator.all.language.translator">View on Google Play ↗</a>
+        </div>
+      </div>
 
       <!-- Clap -->
-
       <div class="card reveal">
-
         <div class="card-top">
           <h3>Clap To Find My Phone</h3>
           <span class="badge">AI</span>
         </div>
-
         <p class="desc">
           Detects hand claps using an on-device AI audio model and helps users
           instantly locate their phones.
         </p>
-
         <div class="tags">
           <span class="tag">Android</span>
           <span class="tag">Machine Learning</span>
           <span class="tag">Audio AI</span>
         </div>
-
       </div>
 
-
-
       <!-- Battery -->
-
       <div class="card reveal">
-
         <div class="card-top">
           <h3>Battery Life & Health Checker</h3>
           <span class="badge">Utility</span>
         </div>
-
         <p class="desc">
           Displays battery health, charging status, battery temperature,
           voltage and real-time battery information.
         </p>
-
         <div class="tags">
           <span class="tag">Android</span>
           <span class="tag">Battery API</span>
           <span class="tag">Utility</span>
         </div>
-
         <div class="cta-row">
-
-          <a class="btn btn-ghost"
-             href="https://play.google.com/store/apps/details?id=com.battery_life_checker.battery_health"
-             target="_blank">
-             Google Play ↗
-          </a>
-
+          <a class="btn btn-ghost" href="https://play.google.com/store/apps/details?id=com.battery_life_checker.battery_health" target="_blank">Google Play ↗</a>
         </div>
-
       </div>
 
-
-
       <!-- Sun -->
-
       <div class="card reveal">
-
         <div class="card-top">
           <h3>Sun & Solar Tracker</h3>
           <span class="badge">Utility</span>
         </div>
-
         <p class="desc">
           Calculates real-time solar position for photographers,
           architects and solar panel planning.
         </p>
-
         <div class="tags">
           <span class="tag">Location</span>
           <span class="tag">Astronomy</span>
           <span class="tag">Android</span>
         </div>
-
       </div>
 
-
-
       <!-- Metal Detector -->
-
       <div class="card reveal">
-
         <div class="card-top">
           <h3>Metal Detector</h3>
           <span class="badge">Sensors</span>
         </div>
-
         <p class="desc">
           Uses Android magnetometer sensors to detect nearby metallic objects
           with real-time magnetic field visualization.
         </p>
-
         <div class="tags">
           <span class="tag">Sensors API</span>
           <span class="tag">Android</span>
         </div>
-
       </div>
 
-
-
       <!-- Live Microphone -->
-
       <div class="card reveal">
-
         <div class="card-top">
           <h3>Live Microphone</h3>
           <span class="badge">Audio</span>
         </div>
-
         <p class="desc">
           Converts the phone into a live microphone and voice amplifier with
           Bluetooth speaker support.
         </p>
-
         <div class="tags">
           <span class="tag">Audio</span>
           <span class="tag">Bluetooth</span>
           <span class="tag">Android</span>
         </div>
-
         <div class="cta-row">
-
-          <a class="btn btn-ghost"
-             href="https://play.google.com/store/apps/details?id=com.shafiqueapps.live_microphone_app"
-             target="_blank">
-             Google Play ↗
-          </a>
-
+          <a class="btn btn-ghost" href="https://play.google.com/store/apps/details?id=com.shafiqueapps.live_microphone_app" target="_blank">Google Play ↗</a>
         </div>
-
       </div>
 
     </div>
-
   </div>
 </section>
+
 <section id="projects" style="background:var(--bg-panel); border-top:1px solid var(--line); border-bottom:1px solid var(--line);">
-
-<div class="wrap">
-
-<div class="section-head reveal">
-
-<div class="section-tag">// Featured Projects</div>
-
-<h2 class="section-title">
-Production Applications & AI Products
-</h2>
-
-<p class="section-sub">
-Real-world Android applications published on Google Play and App Store,
-covering AI, Computer Vision, WebRTC, Utilities and Productivity.
-</p>
-
-</div>
-
-<div class="grid">
-
-
-
-
-<!-- AR DRAWING -->
-
-<div class="card reveal" style="grid-column:1/-1;">
-
-<div class="card-top">
-<h3>AR Drawing App</h3>
-<span class="badge">Computer Vision</span>
-</div>
-
-<p class="desc">
-
-An Augmented Reality drawing application that converts any image into a
-step-by-step sketch guide using OpenCV image processing and live camera
-overlay technology.
-
-</p>
-
-<div class="tags">
-
-<span class="tag">OpenCV</span>
-
-<span class="tag">CameraX</span>
-
-<span class="tag">Computer Vision</span>
-
-<span class="tag">Android</span>
-
-</div>
-
-<div class="cta-row">
-
-<a class="btn btn-ghost"
-href="https://play.google.com/store/apps/details?id=com.sketchbox.drawingapp.anime.flower.pencil.sketch.art"
-target="_blank">
-
-View on Google Play ↗
-
-</a>
-
-</div>
-
-</div>
-
-
-
-
-
-
-
-<!-- AI WRITING -->
-
-<div class="card reveal" style="grid-column:1/-1;">
-
-<div class="card-top">
-
-<h3>AI Grammar Checker</h3>
-
-<span class="badge">3 Versions</span>
-
-</div>
-
-<p class="desc">
-
-A complete AI writing assistant released in multiple versions targeting
-different audiences while sharing the same AI-powered writing engine.
-
-</p>
-
-<div class="versions">
-
-
-
-<div class="version-row">
-
-<div class="v-label">
-
-FULL
-
-</div>
-
-<div class="v-text">
-
-Complete AI Writing Suite including Grammar Correction,
-Article Writing,
-Paraphrasing,
-Rewriting,
-AI Typing Assistant
-and Smart Suggestions.
-
-<br><br>
-
-<a target="_blank"
-href="https://play.google.com/store/apps/details?id=com.ai.grammar.checker.corrector.typing.assistant">
-
-Google Play ↗
-
-</a>
-
-</div>
-
-</div>
-
-
-
-
-
-<div class="version-row">
-
-<div class="v-label">
-
-SIMPLE
-
-</div>
-
-<div class="v-text">
-
-Lightweight AI Grammar Checker with
-Grammar Correction,
-Rewrite,
-Professional Mode
-and AI Keyboard.
-
-<br><br>
-
-<a target="_blank"
-href="https://apps.apple.com/us/app/ai-grammar-checker-fixer/id6757702121">
-
-App Store ↗
-
-</a>
-
-</div>
-
-</div>
-
-
-
-
-
-<div class="version-row">
-
-<div class="v-label">
-
-EXTENDED
-
-</div>
-
-<div class="v-text">
-
-Advanced AI Suite with
-
-Grammar Test,
-
-AI Tutor,
-
-Translator,
-
-Article Writer,
-
-Essay Generator
-
-and Grammar Correction.
-
-<br><br>
-
-<a target="_blank"
-href="https://play.google.com/store/apps/details?id=com.ai_grammarcheckker_grammarcorrector_articlewriterai">
-
-Google Play ↗
-
-</a>
-
-</div>
-
-</div>
-
-
-
-</div>
-
-</div>
-
-
-
-
-
-
-
-
-<!-- RANDOM VIDEO CHAT -->
-
-<div class="card reveal">
-
-<div class="card-top">
-
-<h3>Random Video Chat</h3>
-
-<span class="badge">
-
-WebRTC
-
-</span>
-
-</div>
-
-<p class="desc">
-
-Real-time random video calling application built using WebRTC
-with instant matching,
-live video,
-voice
-and messaging.
-
-</p>
-
-<div class="tags">
-
-<span class="tag">WebRTC</span>
-
-<span class="tag">Firebase</span>
-
-<span class="tag">Real-Time</span>
-
-</div>
-
-<div class="cta-row">
-
-<a class="btn btn-ghost"
-
-target="_blank"
-
-href="https://play.google.com/store/apps/details?id=random.video.calling.app.live.video.chats">
-
-Google Play ↗
-
-</a>
-
-</div>
-
-</div>
-
-
-
-
-
-
-
-<!-- IOS -->
-
-<div class="card reveal">
-
-<div class="card-top">
-
-<h3>AI Grammar Checker (iOS)</h3>
-
-<span class="badge">
-
-Compose Multiplatform
-
-</span>
-
-</div>
-
-<p class="desc">
-
-Native iOS application developed using Compose Multiplatform,
-sharing business logic across Android and iOS platforms.
-
-</p>
-
-<div class="tags">
-
-<span class="tag">Compose MP</span>
-
-<span class="tag">iOS</span>
-
-<span class="tag">AI</span>
-
-</div>
-
-<div class="cta-row">
-
-<a class="btn btn-ghost"
-
-target="_blank"
-
-href="https://apps.apple.com/us/app/ai-grammar-checker-fixer/id6757702121">
-
-App Store ↗
-
-</a>
-
-</div>
-
-</div>
-
-
-
-
-
-
-
-
-<!-- PDF -->
-
-<div class="card reveal" style="grid-column:1/-1;">
-
-<div class="card-top">
-
-<h3>AI PDF Reader & Editor</h3>
-
-<span class="badge wip">
-
-Coming Soon
-
-</span>
-
-</div>
-
-<p class="desc">
-
-Currently building a complete PDF toolkit featuring AI-powered PDF chat,
-editing,
-conversion,
-compression,
-OCR,
-electronic signatures
-and document management.
-
-</p>
-
-<div class="tags">
-
-<span class="tag">AI Chat</span>
-
-<span class="tag">OCR</span>
-
-<span class="tag">PDF Editor</span>
-
-<span class="tag">Merge</span>
-
-<span class="tag">Split</span>
-
-<span class="tag">Compress</span>
-
-<span class="tag">Scan PDF</span>
-
-<span class="tag">Word ⇄ PDF</span>
-
-</div>
-
-</div>
-
-
-
-
-
-</div>
-
-</div>
-
+  <div class="wrap">
+
+    <div class="section-head reveal">
+      <div class="section-tag">// Featured Projects</div>
+      <h2 class="section-title">Production Applications & AI Products</h2>
+      <p class="section-sub">
+        Real-world Android applications published on Google Play and App Store,
+        covering AI, Computer Vision, WebRTC, Utilities and Productivity.
+      </p>
+    </div>
+
+    <div class="grid">
+
+      <!-- AR DRAWING -->
+      <div class="card reveal" style="grid-column:1/-1;">
+        <div class="card-top">
+          <h3>AR Drawing App</h3>
+          <span class="badge">Computer Vision</span>
+        </div>
+        <p class="desc">
+          An Augmented Reality drawing application that converts any image into a
+          step-by-step sketch guide using OpenCV image processing and live camera
+          overlay technology.
+        </p>
+        <div class="tags">
+          <span class="tag">OpenCV</span>
+          <span class="tag">CameraX</span>
+          <span class="tag">Computer Vision</span>
+          <span class="tag">Android</span>
+        </div>
+        <div class="cta-row">
+          <a class="btn btn-ghost" href="https://play.google.com/store/apps/details?id=com.sketchbox.drawingapp.anime.flower.pencil.sketch.art" target="_blank">View on Google Play ↗</a>
+        </div>
+      </div>
+
+      <!-- AI WRITING -->
+      <div class="card reveal" style="grid-column:1/-1;">
+        <div class="card-top">
+          <h3>AI Grammar Checker</h3>
+          <span class="badge">3 Versions</span>
+        </div>
+        <p class="desc">
+          A complete AI writing assistant released in multiple versions targeting
+          different audiences while sharing the same AI-powered writing engine.
+        </p>
+        <div class="versions">
+          <div class="version-row">
+            <div class="v-label">FULL</div>
+            <div class="v-text">
+              Complete AI Writing Suite including Grammar Correction, Article Writing,
+              Paraphrasing, Rewriting, AI Typing Assistant and Smart Suggestions.
+              <br><br>
+              <a target="_blank" href="https://play.google.com/store/apps/details?id=com.ai.grammar.checker.corrector.typing.assistant">Google Play ↗</a>
+            </div>
+          </div>
+          <div class="version-row">
+            <div class="v-label">SIMPLE</div>
+            <div class="v-text">
+              Lightweight AI Grammar Checker with Grammar Correction, Rewrite,
+              Professional Mode and AI Keyboard.
+              <br><br>
+              <a target="_blank" href="https://apps.apple.com/us/app/ai-grammar-checker-fixer/id6757702121">App Store ↗</a>
+            </div>
+          </div>
+          <div class="version-row">
+            <div class="v-label">EXTENDED</div>
+            <div class="v-text">
+              Advanced AI Suite with Grammar Test, AI Tutor, Translator, Article Writer,
+              Essay Generator and Grammar Correction.
+              <br><br>
+              <a target="_blank" href="https://play.google.com/store/apps/details?id=com.ai_grammarcheckker_grammarcorrector_articlewriterai">Google Play ↗</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RANDOM VIDEO CHAT -->
+      <div class="card reveal">
+        <div class="card-top">
+          <h3>Random Video Chat</h3>
+          <span class="badge">WebRTC</span>
+        </div>
+        <p class="desc">
+          Real-time random video calling application built using WebRTC
+          with instant matching, live video, voice and messaging.
+        </p>
+        <div class="tags">
+          <span class="tag">WebRTC</span>
+          <span class="tag">Firebase</span>
+          <span class="tag">Real-Time</span>
+        </div>
+        <div class="cta-row">
+          <a class="btn btn-ghost" target="_blank" href="https://play.google.com/store/apps/details?id=random.video.calling.app.live.video.chats">Google Play ↗</a>
+        </div>
+      </div>
+
+      <!-- IOS -->
+      <div class="card reveal">
+        <div class="card-top">
+          <h3>AI Grammar Checker (iOS)</h3>
+          <span class="badge">Compose Multiplatform</span>
+        </div>
+        <p class="desc">
+          Native iOS application developed using Compose Multiplatform,
+          sharing business logic across Android and iOS platforms.
+        </p>
+        <div class="tags">
+          <span class="tag">Compose MP</span>
+          <span class="tag">iOS</span>
+          <span class="tag">AI</span>
+        </div>
+        <div class="cta-row">
+          <a class="btn btn-ghost" target="_blank" href="https://apps.apple.com/us/app/ai-grammar-checker-fixer/id6757702121">App Store ↗</a>
+        </div>
+      </div>
+
+      <!-- PDF -->
+      <div class="card reveal" style="grid-column:1/-1;">
+        <div class="card-top">
+          <h3>AI PDF Reader & Editor</h3>
+          <span class="badge wip">Coming Soon</span>
+        </div>
+        <p class="desc">
+          Currently building a complete PDF toolkit featuring AI-powered PDF chat,
+          editing, conversion, compression, OCR, electronic signatures
+          and document management.
+        </p>
+        <div class="tags">
+          <span class="tag">AI Chat</span>
+          <span class="tag">OCR</span>
+          <span class="tag">PDF Editor</span>
+          <span class="tag">Merge</span>
+          <span class="tag">Split</span>
+          <span class="tag">Compress</span>
+          <span class="tag">Scan PDF</span>
+          <span class="tag">Word ⇄ PDF</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
 </section>
 
 <section id="skills">
@@ -924,317 +676,106 @@ and document management.
       <span class="skill-pill">iOS (CMP)</span>
       <span class="skill-pill">REST APIs</span>
       <span class="skill-pill">Firebase</span>
-
-<span class="skill-pill">Room Database</span>
-
-<span class="skill-pill">MVVM</span>
-
-<span class="skill-pill">Coroutines</span>
-
-<span class="skill-pill">Flow</span>
-
-<span class="skill-pill">Hilt / Dagger</span>
-
-<span class="skill-pill">Retrofit</span>
-
-<span class="skill-pill">Google Maps</span>
-
-<span class="skill-pill">CameraX</span>
-
-<span class="skill-pill">Play Billing</span>
-
-<span class="skill-pill">Google ML Kit</span>
-
-<span class="skill-pill">Input Method Service</span>
+      <span class="skill-pill">Room Database</span>
+      <span class="skill-pill">MVVM</span>
+      <span class="skill-pill">Coroutines</span>
+      <span class="skill-pill">Flow</span>
+      <span class="skill-pill">Hilt / Dagger</span>
+      <span class="skill-pill">Retrofit</span>
+      <span class="skill-pill">Google Maps</span>
+      <span class="skill-pill">CameraX</span>
+      <span class="skill-pill">Play Billing</span>
+      <span class="skill-pill">Google ML Kit</span>
+      <span class="skill-pill">Input Method Service</span>
     </div>
   </div>
 </section>
 
-
-  <!-- ================= PUBLISHED APPS ================= -->
-
+<!-- ================= PUBLISHED APPS ================= -->
 <section id="published">
-
-<div class="wrap">
-
-<div class="section-head reveal">
-
-<div class="section-tag">// Published Applications</div>
-
-<h2 class="section-title">
-Apps Available on Google Play & App Store
-</h2>
-
-<p class="section-sub">
-A selection of Android and iOS applications successfully published
-across AI, Utilities, Communication, Photo Editing and Productivity.
-</p>
-
-</div>
-
-<div class="grid">
-
-
-
-
-<div class="card reveal">
-
-<div class="card-top">
-<h3>Adil Bakers</h3>
-<span class="badge">Google Play</span>
-</div>
-
-<p class="desc">
-Official bakery ordering application.
-</p>
-
-<a class="btn btn-ghost"
-target="_blank"
-href="https://play.google.com/store/apps/details?id=com.innova.adil_bakers">
-View App ↗
-</a>
-
-</div>
-
-
-
-
-
-
-
-<div class="card reveal">
-
-<div class="card-top">
-<h3>Make Me Fat</h3>
-<span class="badge">Google Play</span>
-</div>
-
-<p class="desc">
-AI powered photo transformation application.
-</p>
-
-<a class="btn btn-ghost"
-target="_blank"
-href="https://play.google.com/store/apps/details?id=com.make_me_fat.fat_face">
-View App ↗
-</a>
-
-</div>
-
-
-
-
-
-
-
-
-<div class="card reveal">
-
-<div class="card-top">
-<h3>Slim To Fat</h3>
-<span class="badge">Optimized Version</span>
-</div>
-
-<p class="desc">
-Performance optimized edition with improved image quality.
-</p>
-
-<a class="btn btn-ghost"
-target="_blank"
-href="https://play.google.com/store/apps/details?id=com.slim_to_fat.fat_face_app">
-View App ↗
-</a>
-
-</div>
-
-
-
-
-
-
-
-
-<div class="card reveal">
-
-<div class="card-top">
-<h3>Battery Life & Health Checker</h3>
-<span class="badge">Google Play</span>
-</div>
-
-<p class="desc">
-Battery monitoring and health diagnostics.
-</p>
-
-<a class="btn btn-ghost"
-target="_blank"
-href="https://play.google.com/store/apps/details?id=com.battery_life_checker.battery_health">
-View App ↗
-</a>
-
-</div>
-
-
-
-
-
-
-
-
-<div class="card reveal">
-
-<div class="card-top">
-<h3>Live Microphone</h3>
-<span class="badge">Google Play</span>
-</div>
-
-<p class="desc">
-Live microphone and voice amplifier.
-</p>
-
-<a class="btn btn-ghost"
-target="_blank"
-href="https://play.google.com/store/apps/details?id=com.shafiqueapps.live_microphone_app">
-View App ↗
-</a>
-
-</div>
-
-
-
-
-
-
-
-
-<div class="card reveal">
-
-<div class="card-top">
-<h3>AR Drawing</h3>
-<span class="badge">Google Play</span>
-</div>
-
-<p class="desc">
-Camera based drawing and sketch tracing application.
-</p>
-
-<a class="btn btn-ghost"
-target="_blank"
-href="https://play.google.com/store/apps/details?id=com.sketchbox.drawingapp.anime.flower.pencil.sketch.art">
-View App ↗
-</a>
-
-</div>
-
-
-
-
-
-
-
-
-<div class="card reveal">
-
-<div class="card-top">
-<h3>AI Grammar Checker</h3>
-<span class="badge">Google Play</span>
-</div>
-
-<p class="desc">
-Complete AI writing assistant.
-</p>
-
-<a class="btn btn-ghost"
-target="_blank"
-href="https://play.google.com/store/apps/details?id=com.ai.grammar.checker.corrector.typing.assistant">
-View App ↗
-</a>
-
-</div>
-
-
-
-
-
-
-
-
-<div class="card reveal">
-
-<div class="card-top">
-<h3>AI Grammar Extended</h3>
-<span class="badge">Google Play</span>
-</div>
-
-<p class="desc">
-Advanced grammar correction and AI writer.
-</p>
-
-<a class="btn btn-ghost"
-target="_blank"
-href="https://play.google.com/store/apps/details?id=com.ai_grammarcheckker_grammarcorrector_articlewriterai">
-View App ↗
-</a>
-
-</div>
-
-
-
-
-
-
-
-
-<div class="card reveal">
-
-<div class="card-top">
-<h3>AI Grammar (iOS)</h3>
-<span class="badge">App Store</span>
-</div>
-
-<p class="desc">
-Compose Multiplatform AI writing assistant.
-</p>
-
-<a class="btn btn-ghost"
-target="_blank"
-href="https://apps.apple.com/us/app/ai-grammar-checker-fixer/id6757702121">
-View App ↗
-</a>
-
-</div>
-
-
-
-
-
-
-
-
-<div class="card reveal">
-
-<div class="card-top">
-<h3>Random Video Chat</h3>
-<span class="badge">Google Play</span>
-</div>
-
-<p class="desc">
-WebRTC based live random video calling.
-</p>
-
-<a class="btn btn-ghost"
-target="_blank"
-href="https://play.google.com/store/apps/details?id=random.video.calling.app.live.video.chats">
-View App ↗
-</a>
-
-</div>
-
-</div>
-
-</div>
-
+  <div class="wrap">
+
+    <div class="section-head reveal">
+      <div class="section-tag">// Published Applications</div>
+      <h2 class="section-title">Apps Available on Google Play & App Store</h2>
+      <p class="section-sub">
+        A selection of Android and iOS applications successfully published
+        across AI, Utilities, Communication, Photo Editing and Productivity.
+        <span style="color:var(--accent);">Client Project</span> marks apps built for external clients; the rest were built at Techin Technology / Mobologics.
+      </p>
+    </div>
+
+    <div class="grid">
+
+      <div class="card reveal">
+        <div class="card-top"><h3>Adil Bakers</h3><span class="badge client">Client Project</span></div>
+        <p class="desc">Official bakery ordering application.</p>
+        <a class="btn btn-ghost" target="_blank" href="https://play.google.com/store/apps/details?id=com.innova.adil_bakers">View App ↗</a>
+      </div>
+
+      <div class="card reveal">
+        <div class="card-top"><h3>KB Chat - Keyboard Translator</h3><span class="badge client">Client Project</span></div>
+        <p class="desc">Custom Android keyboard with multilingual translation.</p>
+        <a class="btn btn-ghost" target="_blank" href="https://play.google.com/store/apps/details?id=com.kb.chat.translator.all.language.translator">View App ↗</a>
+      </div>
+
+      <div class="card reveal">
+        <div class="card-top"><h3>Make Me Fat</h3><span class="badge">Google Play</span></div>
+        <p class="desc">AI powered photo transformation application.</p>
+        <a class="btn btn-ghost" target="_blank" href="https://play.google.com/store/apps/details?id=com.make_me_fat.fat_face">View App ↗</a>
+      </div>
+
+      <div class="card reveal">
+        <div class="card-top"><h3>Slim To Fat</h3><span class="badge">Optimized Version</span></div>
+        <p class="desc">Performance optimized edition with improved image quality.</p>
+        <a class="btn btn-ghost" target="_blank" href="https://play.google.com/store/apps/details?id=com.slim_to_fat.fat_face_app">View App ↗</a>
+      </div>
+
+      <div class="card reveal">
+        <div class="card-top"><h3>Battery Life & Health Checker</h3><span class="badge">Google Play</span></div>
+        <p class="desc">Battery monitoring and health diagnostics.</p>
+        <a class="btn btn-ghost" target="_blank" href="https://play.google.com/store/apps/details?id=com.battery_life_checker.battery_health">View App ↗</a>
+      </div>
+
+      <div class="card reveal">
+        <div class="card-top"><h3>Live Microphone</h3><span class="badge">Google Play</span></div>
+        <p class="desc">Live microphone and voice amplifier.</p>
+        <a class="btn btn-ghost" target="_blank" href="https://play.google.com/store/apps/details?id=com.shafiqueapps.live_microphone_app">View App ↗</a>
+      </div>
+
+      <div class="card reveal">
+        <div class="card-top"><h3>AR Drawing</h3><span class="badge">Google Play</span></div>
+        <p class="desc">Camera based drawing and sketch tracing application.</p>
+        <a class="btn btn-ghost" target="_blank" href="https://play.google.com/store/apps/details?id=com.sketchbox.drawingapp.anime.flower.pencil.sketch.art">View App ↗</a>
+      </div>
+
+      <div class="card reveal">
+        <div class="card-top"><h3>AI Grammar Checker</h3><span class="badge">Google Play</span></div>
+        <p class="desc">Complete AI writing assistant.</p>
+        <a class="btn btn-ghost" target="_blank" href="https://play.google.com/store/apps/details?id=com.ai.grammar.checker.corrector.typing.assistant">View App ↗</a>
+      </div>
+
+      <div class="card reveal">
+        <div class="card-top"><h3>AI Grammar Extended</h3><span class="badge">Google Play</span></div>
+        <p class="desc">Advanced grammar correction and AI writer.</p>
+        <a class="btn btn-ghost" target="_blank" href="https://play.google.com/store/apps/details?id=com.ai_grammarcheckker_grammarcorrector_articlewriterai">View App ↗</a>
+      </div>
+
+      <div class="card reveal">
+        <div class="card-top"><h3>AI Grammar (iOS)</h3><span class="badge">App Store</span></div>
+        <p class="desc">Compose Multiplatform AI writing assistant.</p>
+        <a class="btn btn-ghost" target="_blank" href="https://apps.apple.com/us/app/ai-grammar-checker-fixer/id6757702121">View App ↗</a>
+      </div>
+
+      <div class="card reveal">
+        <div class="card-top"><h3>Random Video Chat</h3><span class="badge">Google Play</span></div>
+        <p class="desc">WebRTC based live random video calling.</p>
+        <a class="btn btn-ghost" target="_blank" href="https://play.google.com/store/apps/details?id=random.video.calling.app.live.video.chats">View App ↗</a>
+      </div>
+
+    </div>
+  </div>
 </section>
-  
 
 <section id="contact">
   <div class="wrap">
@@ -1244,12 +785,7 @@ View App ↗
       <div class="contact-row">
         <a class="btn btn-primary" href="tel:03151258080">📞 0315 1258080</a>
         <a class="btn btn-ghost" href="https://www.linkedin.com/in/saeed-sharif-4978a026b/" target="_blank" rel="noopener">LinkedIn ↗</a>
-        <a class="btn btn-ghost"
-href="saeedsharifk@gmail.com">
-
-Email ↗
-
-</a>
+        <a class="btn btn-ghost" href="mailto:saeedsharifk@gmail.com">Email ↗</a>
       </div>
     </div>
   </div>
@@ -1257,7 +793,14 @@ Email ↗
 
 <footer>
   <div class="wrap">
-    <div class="f-left">© 2026 Saeed Sharif</div>
+    <div class="f-left">
+      <svg class="brand-mark" viewBox="0 0 26 26" aria-hidden="true">
+        <circle class="outer" cx="13" cy="13" r="11.5"></circle>
+        <circle class="iris" cx="13" cy="13" r="7.5"></circle>
+        <circle class="core" cx="13" cy="13" r="2"></circle>
+      </svg>
+      © 2026 Saeed Sharif
+    </div>
     <div class="f-right">Android Developer / Islamabad, Pakistan</div>
   </div>
 </footer>
